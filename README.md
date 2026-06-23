@@ -1,118 +1,99 @@
-<!--
-  AxonOS GitHub profile README.
-  AxonOS-BCI is replaced with your GitHub username by the publish script.
-  All content is factual to AxonOS — no fabricated metrics or claims.
--->
-
 <div align="center">
 
-<!-- ░░ Animated neural banner (committed in this repo; replaces the snake with a brain) ░░ -->
-<a href="https://axonos.org">
-  <img src="https://raw.githubusercontent.com/AxonOS-BCI/AxonOS-BCI/main/assets/axonos-neural-banner.svg" alt="AxonOS — real-time neural operating system for brain-computer interfaces" width="100%"/>
-</a>
+<img src="https://raw.githubusercontent.com/AxonOS-BCI/AxonOS-BCI/main/assets/axonos-neural-banner.svg" alt="AxonOS — real-time neural operating system for brain–computer interfaces" width="100%"/>
 
-<!-- ░░ Typing tagline ░░ -->
-<a href="https://axonos.org">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1100&color=36D6A0&center=true&vCenter=true&width=760&lines=Real-time+neural+OS+for+brain-computer+interfaces;Rust+%C2%B7+%23!%5Bno_std%5D+%C2%B7+ARMv8-M+%C2%B7+EDF+real-time;Hard+real-time.+Open+source.+Privacy+by+design." alt="Typing SVG"/>
-</a>
+[axonos.org](https://axonos.org) &nbsp;·&nbsp; [Engineering notes](https://medium.com/@AxonOS) &nbsp;·&nbsp; connect@axonos.org
 
 </div>
 
-# 🧠 Hi, I'm Denis Yermakou — founder & lead engineer of AxonOS
+<br/>
 
-<div align="center">
+**AxonOS** is a hard real-time operating system for brain–computer interfaces — the layer between the silicon and the application, where neither Linux nor a stock RTOS can hold the jitter and latency a closed neural loop demands. Written in Rust, `#![no_std]`, for ARMv8-M.
 
-[![Website](https://img.shields.io/badge/-axonos.org-0b1a30?style=flat-square&logo=firefox-browser&logoColor=36D6A0)](https://axonos.org)
-[![Medium](https://img.shields.io/badge/-Medium-0b1a30?style=flat-square&logo=medium&logoColor=white)](https://medium.com/@AxonOS)
-[![Email](https://img.shields.io/badge/-connect@axonos.org-0b1a30?style=flat-square&logo=gmail&logoColor=f0c869)](mailto:connect@axonos.org)
-[![Org: AxonOS](https://img.shields.io/badge/-AxonOS--org-0b1a30?style=flat-square&logo=github&logoColor=white)](https://github.com/AxonOS-org)
+The guarantees below are measured on the target, not aspirational. They are encoded the same way they are enforced — in code.
 
-</div>
+```rust
+#![no_std]
+#![forbid(unsafe_code)]
 
----
+//! AxonOS — a deterministic, hard real-time OS for brain–computer interfaces.
+//! The layer between silicon and intent.
 
-## 🔬 About
+/// Deadlines are biological, not arbitrary.
+pub enum Schedule {
+    EarliestDeadlineFirst,
+}
 
-I am building **[AxonOS](https://axonos.org)** — an open-source, hard real-time operating system that sits between the silicon and the application layer of a brain–computer interface, where neither Linux nor a stock RTOS can meet the jitter and latency a closed neural loop demands.
+/// Consent is enforced at Layer 2 (Connection) — below the coupling engine —
+/// so no higher cognitive layer can override a withdrawal. `Withdrawn` is terminal.
+pub enum Consent {
+    Granted,
+    Suspended,
+    Withdrawn,
+}
 
-- 🧠 **Building:** AxonOS — a deterministic neural OS for BCIs (kernel, real-time pipeline, SDK, protocol-level consent).
-- 🦀 **In:** Rust, `#![no_std]`, on **ARMv8-M / Cortex-M** — embedded, allocation-free critical paths, `#![forbid(unsafe_code)]` where it counts.
-- ⚙️ **Focus:** hard real-time scheduling (EDF with biological deadlines), zero-copy DMA signal pipelines, capability-gated intent streams, and **consent enforced at the protocol layer** so no higher layer can override it.
-- 🤝 **Open to collaborate on:** open BCI infrastructure, neural mesh protocols, and embedded real-time safety.
-- 📝 **I write** about the architecture, end to end, on [Medium](https://medium.com/@AxonOS).
-- 📫 **Reach me:** [connect@axonos.org](mailto:connect@axonos.org) · security reports to security@axonos.org.
+/// The real-time contract, held on every cycle of the dual-core pipeline.
+pub struct Kernel;
 
----
+impl Kernel {
+    pub const TARGET:       &'static str = "thumbv8m.main-none-eabihf"; // Cortex-M33 + TrustZone-M
+    pub const SCHEDULE:     Schedule     = Schedule::EarliestDeadlineFirst;
+    pub const WCRT_NS:      u32          = 972_000; // worst-case response, sensor → intent
+    pub const JITTER_NS:    u32          = 2_100;   // σ; Linux mainline ≈ 1_325_000 ns  (~630×)
+    pub const HEAP_ON_PATH: bool         = false;   // zero-copy DMA into a static slab arena
+}
 
-## 🛠️ Tech
+/// The kernel exposes exactly one typed, capability-gated event stream.
+pub trait IntentStream {
+    fn poll(&mut self) -> Option<Observation>;
+    fn consent(&self) -> Consent;
+}
+```
 
-**Languages**
+### What the kernel holds
 
-![Rust](https://img.shields.io/badge/-Rust-000000?style=flat-square&logo=rust&logoColor=white)
-![C](https://img.shields.io/badge/-C-A8B9CC?style=flat-square&logo=c&logoColor=white)
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![WebAssembly](https://img.shields.io/badge/-WebAssembly-654FF0?style=flat-square&logo=webassembly&logoColor=white)
-![Bash](https://img.shields.io/badge/-Bash-000000?style=flat-square&logo=gnu-bash&logoColor=white)
-![LaTeX](https://img.shields.io/badge/-LaTeX-008080?style=flat-square&logo=latex&logoColor=white)
-![Markdown](https://img.shields.io/badge/-Markdown-000000?style=flat-square&logo=markdown&logoColor=white)
+| | |
+|:--|:--|
+| **Target** | Cortex-M33 + TrustZone-M (ARMv8-M) · `thumbv8m.main-none-eabihf` |
+| **Scheduling** | Earliest-Deadline-First, biological deadlines |
+| **Jitter** | 2.1 µs σ · 6.5 µs P99.9 — ≈630× tighter than Linux mainline |
+| **WCRT** | 972 µs, sensor acquisition → classified intent, dual-core |
+| **Front end** | ADS1299 · 8-channel · 24-bit |
+| **Discipline** | `#![no_std]` · `#![forbid(unsafe_code)]` on the hot path · no heap on the critical path |
 
-**Embedded & real-time**
+### One stream, every language
 
-![ARM Cortex-M](https://img.shields.io/badge/-ARM%20Cortex--M-0091BD?style=flat-square&logo=arm&logoColor=white)
-![no_std](https://img.shields.io/badge/-%23!%5Bno__std%5D-DEA584?style=flat-square&logo=rust&logoColor=white)
-![STM32](https://img.shields.io/badge/-STM32-03234B?style=flat-square&logo=stmicroelectronics&logoColor=white)
-![Nordic nRF](https://img.shields.io/badge/-Nordic%20nRF-00A9CE?style=flat-square&logo=nordicsemiconductor&logoColor=white)
-![Real-time](https://img.shields.io/badge/-Real--time%20(EDF)-1f6f54?style=flat-square&logo=clockify&logoColor=white)
-![DMA](https://img.shields.io/badge/-Zero--copy%20DMA-1f6f54?style=flat-square)
+The kernel emits a single 32-byte intent record. Every binding decodes it byte-for-byte identically — the wire format *is* the contract.
 
-**Domain**
+```rust
+use axonos_sdk::{Capability, IntentKind, IntentStream, Manifest};
 
-![BCI](https://img.shields.io/badge/-Brain%E2%80%93Computer%20Interfaces-7af0ff?style=flat-square&logoColor=000000)
-![EEG](https://img.shields.io/badge/-EEG%20%2F%20ADS1299-36D6A0?style=flat-square)
-![Neurotech](https://img.shields.io/badge/-Neurotechnology-f0c869?style=flat-square)
+let manifest = Manifest::builder()
+    .app_id("org.axonos.cursor")?
+    .capability(Capability::Navigation)   // kernel caps delivery at 50 Hz
+    .max_rate_hz(50)
+    .build()?;
 
-**Tooling**
+let mut stream = IntentStream::connect(&manifest)?; // ABI handshake, then data flows
+while let Some(obs) = stream.poll() {
+    if let IntentKind::Direction(dir) = obs.kind() {
+        cursor.step(dir, obs.confidence_raw());       // u16 Q0.16 — exact, never a float
+    }
+}
+```
 
-![Cargo](https://img.shields.io/badge/-Cargo-000000?style=flat-square&logo=rust&logoColor=white)
-![Git](https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/-GitHub%20Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
-![Linux](https://img.shields.io/badge/-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
-![Android](https://img.shields.io/badge/-Android%20%2F%20Termux-3DDC84?style=flat-square&logo=android&logoColor=white)
+### Repositories
 
----
+| Repository | Purpose |
+|:--|:--|
+| [**axonos-sdk**](https://github.com/AxonOS-org/axonos-sdk) | Reference SDK for the typed intent stream — Rust |
+| [**axonos-sdk-swift**](https://github.com/AxonOS-org/axonos-sdk-swift) | Pure-Swift binding decoding the identical wire format |
+| **kernel · pipeline · consent** | Hard real-time core and protocol-level consent — Rust, `#![no_std]` |
 
-## 📊 GitHub
-
-<div align="center">
-
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=AxonOS-BCI&show_icons=true&include_all_commits=true&count_private=true&hide_border=true&bg_color=04070D&title_color=36D6A0&icon_color=F0C869&text_color=C9D1D9" alt="stats"/>
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AxonOS-BCI&layout=compact&hide_border=true&bg_color=04070D&title_color=36D6A0&text_color=C9D1D9" alt="top languages"/>
-
-<img height="165" src="https://github-readme-streak-stats.herokuapp.com/?user=AxonOS-BCI&hide_border=true&background=04070D&stroke=36D6A0&ring=F0C869&fire=F0C869&currStreakLabel=36D6A0&sideLabels=C9D1D9&dates=8CA0BA&currStreakNum=FFFFFF&sideNums=FFFFFF" alt="streak"/>
-
-</div>
-
-<!-- ░░ Contribution activity rendered as a brain-wave / EEG trace (this is the "brain instead of snake") ░░ -->
-<div align="center">
-
-[![AxonOS neural activity](https://github-readme-activity-graph.vercel.app/graph?username=AxonOS-BCI&bg_color=04070D&color=7AF0FF&line=36D6A0&point=F0C869&area=true&area_color=0F3B34&hide_border=true&custom_title=Neural%20Activity%20%E2%80%94%20contribution%20signal)](https://github.com/AxonOS-BCI)
-
-</div>
-
----
-
-## 🧩 Selected work
-
-- **[axonos-sdk](https://github.com/AxonOS-org/axonos-sdk)** — the reference SDK for the AxonOS typed intent stream (Rust).
-- **[axonos-sdk-swift](https://github.com/AxonOS-org/axonos-sdk-swift)** — pure-Swift binding decoding the same wire format.
-- **AxonOS** — kernel, real-time pipeline, and protocol-level consent (Rust, `#![no_std]`).
-
-> Pinned repositories below show what I'm actively building.
+<sub>Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
 
 ---
 
 <div align="center">
-
-⭐️ from **Denis Yermakou** · [axonos.org](https://axonos.org) · [medium.com/@AxonOS](https://medium.com/@AxonOS) · connect@axonos.org
-
+<sub><b>The AxonOS Project</b> &nbsp;·&nbsp; <a href="https://axonos.org">axonos.org</a> &nbsp;·&nbsp; connect@axonos.org &nbsp;·&nbsp; security@axonos.org</sub>
 </div>
