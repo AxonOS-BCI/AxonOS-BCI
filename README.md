@@ -84,11 +84,17 @@ while let Some(obs) = stream.poll() {
 
 ### Repositories
 
-| Repository | Purpose |
-|:--|:--|
-| [**axonos-sdk**](https://github.com/AxonOS-org/axonos-sdk) | Reference SDK for the typed intent stream — Rust |
-| [**axonos-sdk-swift**](https://github.com/AxonOS-org/axonos-sdk-swift) | Pure-Swift binding decoding the identical wire format |
-| **kernel · pipeline · consent** | Hard real-time core and protocol-level consent — Rust, `#![no_std]` |
+Reference implementations live under [**AxonOS-org**](https://github.com/AxonOS-org): [axonos-sdk](https://github.com/AxonOS-org/axonos-sdk) · [axonos-sdk-swift](https://github.com/AxonOS-org/axonos-sdk-swift).
+
+| Repository | Language | Description |
+|:--|:--|:--|
+| [**axonos-community-radar**](https://github.com/AxonOS-BCI/axonos-community-radar) | Python | AxonOS community radar for BCI, neurotechnology, real-time Rust, privacy and cognitive i |
+| [**axonos-boundary-run-v52**](https://github.com/AxonOS-BCI/axonos-boundary-run-v52) | JavaScript | Playable, zero-telemetry cognitive-privacy game for AxonOS boundary semantics — with a d |
+| [**neural-boundary-game**](https://github.com/AxonOS-BCI/neural-boundary-game) | Rust | AxonOS Boundary Console — deterministic Rust/WASM cognitive sovereignty runtime for neur |
+| [**axonos-boundary-run-v64**](https://github.com/AxonOS-BCI/axonos-boundary-run-v64) | JavaScript | AxonOS Boundary Run v64 — The Sovereign Signal. Zero-telemetry cognitive privacy simulat |
+| [**axonos-boundary-run-v9**](https://github.com/AxonOS-BCI/axonos-boundary-run-v9) | JavaScript | Boundary Run v9.0.1 — AxonOS serious browser game with SHA-256 replay proof and zero tel |
+| [**neural-boundary-game-play**](https://github.com/AxonOS-BCI/neural-boundary-game-play) | HTML | AxonOS Education Boundary Run v8.8.4 — click RUN GAME and play instantly |
+| [**AG0001**](https://github.com/AxonOS-BCI/AG0001) | — |  |
 
 <sub>Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
 
