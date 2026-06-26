@@ -8,9 +8,17 @@
 
 <br/>
 
-**AxonOS** is a hard real-time operating system for brain–computer interfaces — the layer between the silicon and the application, where neither Linux nor a stock RTOS can hold the jitter and latency a closed neural loop demands. Written in Rust, `#![no_std]`, for ARMv8-M.
+> **This is the founder, demo, and community surface for AxonOS.**
+> The canonical engineering source of truth is the [**AxonOS-org**](https://github.com/AxonOS-org) organisation.
+> Every quantitative performance and validation claim is governed by one file —
+> [`axonos-standard/CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md) —
+> which records, for each figure, its evidence level, the artefact it is re-derived from, and the finding that would falsify it.
 
-The guarantees below are measured on the target, not aspirational. They are encoded the same way they are enforced — in code.
+<br/>
+
+**AxonOS** is a hard real-time operating system for brain–computer interfaces — the layer between the silicon and the application, where neither Linux nor a stock RTOS can hold the jitter and latency a closed neural loop demands. Written in Rust, `#![no_std]`, for ARM Cortex-M.
+
+The figures below are **analytical bounds, proven with Kani and derived from datasheet cycle counts** — not measurements. On-hardware validation is pre-registered and publication-pending in [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation); no measured number is claimed until its raw trace is published. They are encoded the same way they are enforced — in code.
 
 ```rust
 #![no_std]
@@ -36,11 +44,14 @@ pub enum Consent {
 pub struct Kernel;
 
 impl Kernel {
-    pub const TARGET:       &'static str = "thumbv8m.main-none-eabihf"; // Cortex-M33 + TrustZone-M
-    pub const SCHEDULE:     Schedule     = Schedule::EarliestDeadlineFirst;
-    pub const WCRT_NS:      u32          = 972_000; // worst-case response, sensor → intent
-    pub const JITTER_NS:    u32          = 2_100;   // σ; Linux mainline ≈ 1_325_000 ns  (~630×)
-    pub const HEAP_ON_PATH: bool         = false;   // zero-copy DMA into a static slab arena
+    // Current reference bring-up; the firmware crate boots here.
+    pub const TARGET_CURRENT: &'static str = "thumbv7em-none-eabihf"; // Cortex-M4F · STM32F407
+    // Documented next target for the secure Cognitive Hypervisor.
+    pub const TARGET_NEXT:    &'static str = "thumbv8m.main-none-eabihf"; // Cortex-M33 + TrustZone-M · STM32H573
+    pub const SCHEDULE:       Schedule     = Schedule::EarliestDeadlineFirst;
+    pub const WCRT_NS:        u32          = 972_000; // L1 analytical bound (Liu–Layland EDF), inside a 4 ms deadline
+    pub const JITTER_NS:      u32          = 2_100;   // σ, derived; on-hardware L2 trace publication-pending
+    pub const HEAP_ON_PATH:   bool         = false;   // zero-copy DMA into a static slab arena
 }
 
 /// The kernel exposes exactly one typed, capability-gated event stream.
@@ -54,16 +65,20 @@ pub trait IntentStream {
 
 | | |
 |:--|:--|
-| **Target** | Cortex-M33 + TrustZone-M (ARMv8-M) · `thumbv8m.main-none-eabihf` |
+| **Current target** | Cortex-M4F · STM32F407 · `thumbv7em-none-eabihf` (reference firmware boots here) |
+| **Next target** | Cortex-M33 + TrustZone-M (ARMv8-M) · STM32H573 · `thumbv8m.main-none-eabihf` |
 | **Scheduling** | Earliest-Deadline-First, biological deadlines |
-| **Jitter** | 2.1 µs σ · 6.5 µs P99.9 — ≈630× tighter than Linux mainline |
-| **WCRT** | 972 µs, sensor acquisition → classified intent, dual-core |
+| **WCRT** | ≤ 972 µs end-to-end, inside a 4 ms deadline — **L1 analytical bound** (Liu–Layland EDF) |
+| **Jitter** | 2.1 µs σ · 6.5 µs P99.9 — **derived**; on-hardware trace publication-pending |
 | **Front end** | ADS1299 · 8-channel · 24-bit |
-| **Discipline** | `#![no_std]` · `#![forbid(unsafe_code)]` on the hot path · no heap on the critical path |
+| **Verification** | `#![forbid(unsafe_code)]` outside two documented, Kani-verified `unsafe` operations · 30 Kani BMC harnesses |
+| **Discipline** | `#![no_std]` · no heap on the critical path · zero-copy DMA |
+
+<sub>Evidence levels (**L1** formally proven · **L2** measured on reference hardware · **L3** independently validated) and the falsifiability of each figure are defined in [`axonos-standard/VALIDATION.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md) and catalogued in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md). The peer-readable derivation is the [Zenodo preprint](https://doi.org/10.5281/zenodo.20552007) — analytical, falsifiable, **no measurement claims**.</sub>
 
 ### One stream, every language
 
-The kernel emits a single 32-byte intent record. Every binding decodes it byte-for-byte identically — the wire format *is* the contract.
+The kernel emits a single 32-byte intent record. Every binding decodes it byte-for-byte identically — the wire format *is* the contract, cross-checked across Rust, Python, C, JavaScript, and Java in [`axonos-conformance`](https://github.com/AxonOS-org/axonos-conformance).
 
 ```rust
 use axonos_sdk::{Capability, IntentKind, IntentStream, Manifest};
@@ -84,19 +99,15 @@ while let Some(obs) = stream.poll() {
 
 ### Repositories
 
-Reference implementations live under [**AxonOS-org**](https://github.com/AxonOS-org): [axonos-sdk](https://github.com/AxonOS-org/axonos-sdk) · [axonos-sdk-swift](https://github.com/AxonOS-org/axonos-sdk-swift).
+The engineering substrate — kernel, consent, protocol, conformance, SDKs, standard — lives under [**AxonOS-org**](https://github.com/AxonOS-org). This account hosts the public-facing demos and community tooling.
 
-| Repository | Language | Description |
+| Repository | Language | What it is |
 |:--|:--|:--|
-| [**axonos-community-radar**](https://github.com/AxonOS-BCI/axonos-community-radar) | Python | AxonOS community radar for BCI, neurotechnology, real-time Rust, privacy and cognitive i |
-| [**axonos-boundary-run-v52**](https://github.com/AxonOS-BCI/axonos-boundary-run-v52) | JavaScript | Playable, zero-telemetry cognitive-privacy game for AxonOS boundary semantics — with a d |
-| [**neural-boundary-game**](https://github.com/AxonOS-BCI/neural-boundary-game) | Rust | AxonOS Boundary Console — deterministic Rust/WASM cognitive sovereignty runtime for neur |
-| [**axonos-boundary-run-v64**](https://github.com/AxonOS-BCI/axonos-boundary-run-v64) | JavaScript | AxonOS Boundary Run v64 — The Sovereign Signal. Zero-telemetry cognitive privacy simulat |
-| [**axonos-boundary-run-v9**](https://github.com/AxonOS-BCI/axonos-boundary-run-v9) | JavaScript | Boundary Run v9.0.1 — AxonOS serious browser game with SHA-256 replay proof and zero tel |
-| [**neural-boundary-game-play**](https://github.com/AxonOS-BCI/neural-boundary-game-play) | HTML | AxonOS Education Boundary Run v8.8.4 — click RUN GAME and play instantly |
-| [**AG0001**](https://github.com/AxonOS-BCI/AG0001) | — |  |
+| [**neural-boundary-game**](https://github.com/AxonOS-BCI/neural-boundary-game) | Rust / WASM | **Canonical interactive demo.** Deterministic Rust/WASM model of the AxonOS sovereignty architecture — consent, least-privilege scopes, sealed privacy vault, StimGuard — playable in-browser, byte-for-byte replayable. The demo embedded on axonos.org. |
+| [**axonos-boundary-run-v64**](https://github.com/AxonOS-BCI/axonos-boundary-run-v64) | JavaScript | Latest pure-JS browser game — *The Sovereign Signal*. Zero-telemetry cognitive-boundary simulator with a deterministic, independently verifiable SHA-256 replay proof, re-checked in CI in both JavaScript and Python. |
+| [**axonos-community-radar**](https://github.com/AxonOS-BCI/axonos-community-radar) | Python | A living map of the open BCI / neurotech / real-time-Rust ecosystem, refreshed from GitHub on a schedule. Zero runtime dependencies. |
 
-<sub>Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
+<sub>Earlier game iterations — `axonos-boundary-run-v9`, `axonos-boundary-run-v52`, `neural-boundary-game-play` — are kept as historical references and are being archived in favour of the two demos above. Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
 
 ---
 
