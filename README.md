@@ -4,6 +4,14 @@
 
 [axonos.org](https://axonos.org) &nbsp;·&nbsp; [Engineering notes](https://medium.com/@AxonOS) &nbsp;·&nbsp; connect@axonos.org
 
+<br/>
+
+[![Kernel](https://img.shields.io/badge/kernel-Rust%20%C2%B7%20no__std-000?logo=rust&logoColor=white)](https://github.com/AxonOS-org/axonos-kernel)
+[![Verification](https://img.shields.io/badge/verification-Kani%20BMC%20%C2%B7%2030%20harnesses-34d399)](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md)
+[![Claims](https://img.shields.io/badge/every%20figure-governed%20by%20CLAIMS.md-0a4a8f)](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md)
+[![Preprint](https://img.shields.io/badge/preprint-Zenodo-1682D4)](https://doi.org/10.5281/zenodo.20552007)
+[![Live radar](https://img.shields.io/badge/live-BCI%20ecosystem%20radar-2dd4ff)](https://axonos-bci.github.io/axonos-community-radar/)
+
 </div>
 
 <br/>
@@ -97,15 +105,49 @@ while let Some(obs) = stream.poll() {
 }
 ```
 
-### Repositories
+### The engineering substrate — [AxonOS-org](https://github.com/AxonOS-org)
 
-The engineering substrate — kernel, consent, protocol, conformance, SDKs, standard — lives under [**AxonOS-org**](https://github.com/AxonOS-org). This account hosts the public-facing demos and community tooling.
+The kernel and everything it contracts with. Every quantitative claim across these repositories is re-derived from an artefact and catalogued in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md); nothing here is asserted without a falsifiable source.
 
-| Repository | Language | What it is |
+| Layer | Repository | What it holds |
 |:--|:--|:--|
-| [**neural-boundary-game**](https://github.com/AxonOS-BCI/neural-boundary-game) | Rust / WASM | **Canonical interactive demo.** Deterministic Rust/WASM model of the AxonOS sovereignty architecture — consent, least-privilege scopes, sealed privacy vault, StimGuard — playable in-browser, byte-for-byte replayable. The demo embedded on axonos.org. |
-| [**axonos-boundary-run-v64**](https://github.com/AxonOS-BCI/axonos-boundary-run-v64) | JavaScript | Latest pure-JS browser game — *The Sovereign Signal*. Zero-telemetry cognitive-boundary simulator with a deterministic, independently verifiable SHA-256 replay proof, re-checked in CI in both JavaScript and Python. |
-| [**axonos-community-radar**](https://github.com/AxonOS-BCI/axonos-community-radar) | Python | A living map of the open BCI / neurotech / real-time-Rust ecosystem, refreshed from GitHub on a schedule. Zero runtime dependencies. |
+| **Kernel** | [`axonos-kernel`](https://github.com/AxonOS-org/axonos-kernel) | Hard real-time scheduling core · EDF · `#![no_std]` · zero heap on the critical path |
+| **Signal** | [`axonos-signal-pipeline`](https://github.com/AxonOS-org/axonos-signal-pipeline) | Deterministic ADS1299 → intent DSP pipeline · zero-copy DMA into a static slab arena |
+| **Consent** | [`axonos-consent`](https://github.com/AxonOS-org/axonos-consent) | Layer-2 consent enforcement · `Withdrawn` is terminal · below the coupling engine |
+| **Protocol** | [`axonos-protocol`](https://github.com/AxonOS-org/axonos-protocol) | BCI-to-BCI mesh wire format · the 32-byte intent record · reference implementation |
+| **Swarm** | [`axonos-swarm`](https://github.com/AxonOS-org/axonos-swarm) | Multi-device coordination over the mesh protocol |
+| **Standard** | [`axonos-standard`](https://github.com/AxonOS-org/axonos-standard) | The specification, evidence levels (L1/L2/L3), `CLAIMS.md`, `VALIDATION.md`, conformance tiers |
+| **Conformance** | [`axonos-conformance`](https://github.com/AxonOS-org/axonos-conformance) | The wire format *is* the contract — decoded byte-for-byte identically across Rust, Python, C, JS, Java |
+| **Validation** | [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation) | Pre-registered on-hardware validation · no measured figure is claimed until its raw trace lands here |
+| **SDKs** | [`axonos-sdk`](https://github.com/AxonOS-org/axonos-sdk) · [`·python`](https://github.com/AxonOS-org/axonos-sdk-python) · [`·swift`](https://github.com/AxonOS-org/axonos-sdk-swift) | Capability-gated client bindings — one intent stream, every language |
+| **Governance** | [`axonos-rfcs`](https://github.com/AxonOS-org/axonos-rfcs) | Design proposals and the record of how the architecture is decided |
+
+<sub>**Evidence levels** — <b>L1</b> formally proven (Kani / analytical bound) · <b>L2</b> measured on reference hardware · <b>L3</b> independently validated. The mapping from every published figure to its evidence level and its falsifier is the single source of truth in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md).</sub>
+
+### This account — founder, demos & community
+
+
+
+| Repository | Activity | What it is |
+|:--|:--|:--|
+| [**neural-boundary-game**](https://github.com/AxonOS-BCI/neural-boundary-game) | ![last](https://img.shields.io/github/last-commit/AxonOS-BCI/neural-boundary-game?label=&style=flat-square&color=34d399) | **Canonical interactive demo.** Deterministic Rust/WASM model of the AxonOS sovereignty architecture — consent, least-privilege scopes, sealed privacy vault, StimGuard — playable in-browser, byte-for-byte replayable. The demo embedded on axonos.org. |
+| [**axonos-boundary-run-v64**](https://github.com/AxonOS-BCI/axonos-boundary-run-v64) | ![last](https://img.shields.io/github/last-commit/AxonOS-BCI/axonos-boundary-run-v64?label=&style=flat-square&color=34d399) | Latest pure-JS browser game — *The Sovereign Signal*. Zero-telemetry cognitive-boundary simulator with a deterministic, independently verifiable SHA-256 replay proof, re-checked in CI in both JavaScript and Python. |
+
+<br/>
+
+<table>
+<tr><td width="60" align="center" valign="top">
+
+### 🛰️
+
+</td><td valign="top">
+
+**[axonos-community-radar](https://github.com/AxonOS-BCI/axonos-community-radar)** &nbsp; [![live](https://img.shields.io/badge/live-axonos--bci.github.io-2dd4ff?style=flat-square)](https://axonos-bci.github.io/axonos-community-radar/) &nbsp; ![last](https://img.shields.io/github/last-commit/AxonOS-BCI/axonos-community-radar?label=&style=flat-square&color=34d399)
+
+A **living map of the open BCI / neurotech / real-time-Rust ecosystem** — refreshed from GitHub every three hours, relevance-filtered by evidence tier, zero runtime dependencies. It now surfaces the AxonOS ecosystem itself: an *"AxonOS ecosystem"* panel mapping the maintaining org, the people building each repository, and the shared-maintainer links between them — every fact live from the public GitHub API, none fabricated.
+
+</td></tr>
+</table>
 
 <sub>Earlier game iterations — `axonos-boundary-run-v9`, `axonos-boundary-run-v52`, `neural-boundary-game-play` — are kept as historical references and are being archived in favour of the two demos above. Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
 
