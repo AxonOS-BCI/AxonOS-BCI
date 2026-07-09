@@ -11,6 +11,7 @@
 [![Claims](https://img.shields.io/badge/every%20figure-governed%20by%20CLAIMS.md-0a4a8f)](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md)
 [![Preprint](https://img.shields.io/badge/preprint-Zenodo-1682D4)](https://doi.org/10.5281/zenodo.20552007)
 [![Live radar](https://img.shields.io/badge/live-BCI%20ecosystem%20radar-2dd4ff)](https://axonos-bci.github.io/axonos-community-radar/)
+[![Ecosystem pulse](https://img.shields.io/endpoint?url=https%3A%2F%2Faxonos-bci.github.io%2Faxonos-community-radar%2Fdata%2Fbadge-ecosystem.json)](https://axonos-bci.github.io/axonos-community-radar/data/ecosystem.json)
 
 </div>
 
@@ -150,6 +151,20 @@ A **living map of the open BCI / neurotech / real-time-Rust ecosystem** — refr
 </table>
 
 <sub>Earlier game iterations — `axonos-boundary-run-v9`, `axonos-boundary-run-v52`, `neural-boundary-game-play` — are kept as historical references and are being archived in favour of the two demos above. Engineering is documented end to end in the [AxonOS notes](https://medium.com/@AxonOS).</sub>
+
+---
+
+### 💛 Support the ecosystem
+
+Everything above — the radar, the games, the OS — is free and open: no paywalls, no ads, no tracking, no tokens. If this work is useful to you, a **voluntary Dogecoin tip** is the direct way to fuel it. One ecosystem, one address:
+
+<div align="center">
+
+**[Support page](https://axonos-bci.github.io/axonos-community-radar/support.html)** &nbsp;·&nbsp; `DMwHAhqVNWf7dyEznukxCufNS5rjuP5MTp` &nbsp;·&nbsp; [verify on-chain](https://dogechain.info/address/DMwHAhqVNWf7dyEznukxCufNS5rjuP5MTp)
+
+</div>
+
+<sub>Contributions are voluntary — not purchases, not investments, no product entitlement. Commercial licensing is a separate written-agreement channel (fiat default): connect@axonos.org. Full terms: [CRYPTO_PAYMENT_TERMS.md](https://github.com/AxonOS-BCI/neural-boundary-game/blob/main/CRYPTO_PAYMENT_TERMS.md).</sub>
 
 ---
 
