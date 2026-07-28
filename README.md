@@ -127,6 +127,12 @@ The kernel and everything it contracts with. Every quantitative claim across the
 
 ### This account — founder, demos & community
 
+The other half of one organism: **AxonOS-org** holds the law and the running
+core; this account holds its **senses** — the
+[community radar](https://axonos-bci.github.io/axonos-community-radar/), a
+living, scored map of the whole open-BCI field — and its **skin**, the
+playable demos below. [The full anatomy →](https://github.com/AxonOS-org#one-organism)
+
 
 
 | Repository | Activity | What it is |
