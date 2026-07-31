@@ -117,6 +117,11 @@ The kernel and everything it contracts with. Every quantitative claim across the
 | **Consent** | [`axonos-consent`](https://github.com/AxonOS-org/axonos-consent) | Layer-2 consent enforcement · `Withdrawn` is terminal · below the coupling engine |
 | **Protocol** | [`axonos-protocol`](https://github.com/AxonOS-org/axonos-protocol) | BCI-to-BCI mesh wire format · the 32-byte intent record · reference implementation |
 | **Swarm** | [`axonos-swarm`](https://github.com/AxonOS-org/axonos-swarm) | Multi-device coordination over the mesh protocol |
+| **Silicon boundary** | [`axonos-hal`](https://github.com/AxonOS-org/axonos-hal) | The contract with hardware · a timing budget that *refuses* a configuration whose deadline the measured chain cannot meet |
+| **Privacy** | [`axonos-vault`](https://github.com/AxonOS-org/axonos-vault) | Raw samples are unreachable by construction · only bounded, purpose-bound, budgeted reductions leave, and each is recorded |
+| **Posture** | [`axonos-supervisor`](https://github.com/AxonOS-org/axonos-supervisor) | The right to *act* is withdrawn on signal quality; the right to *record* never is |
+| **Integration** | [`axonos-stack`](https://github.com/AxonOS-org/axonos-stack) | The three above running as one session from a seed, with a byte-exact transcript diffed in CI |
+| **Scoring** | [`axonos-brs`](https://github.com/AxonOS-org/axonos-brs) | The relevance score behind the radar · integer arithmetic so a browser can recompute what the scanner published |
 | **Standard** | [`axonos-standard`](https://github.com/AxonOS-org/axonos-standard) | The specification, evidence levels (L1/L2/L3), `CLAIMS.md`, `VALIDATION.md`, conformance tiers |
 | **Conformance** | [`axonos-conformance`](https://github.com/AxonOS-org/axonos-conformance) | The wire format *is* the contract — decoded byte-for-byte identically across Rust, Python, C, JS, Java |
 | **Validation** | [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation) | Pre-registered on-hardware validation · no measured figure is claimed until its raw trace lands here |
@@ -124,6 +129,40 @@ The kernel and everything it contracts with. Every quantitative claim across the
 | **Governance** | [`axonos-rfcs`](https://github.com/AxonOS-org/axonos-rfcs) | Design proposals and the record of how the architecture is decided |
 
 <sub>**Evidence levels** — <b>L1</b> formally proven (Kani / analytical bound) · <b>L2</b> measured on reference hardware · <b>L3</b> independently validated. The mapping from every published figure to its evidence level and its falsifier is the single source of truth in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md).</sub>
+
+### Doubt it in ninety seconds
+
+The fastest way to judge any of this is not to read it.
+
+```sh
+# the whole chain from a seed: electrode -> privacy vault -> the right to act
+git clone https://github.com/AxonOS-org/axonos-stack && cd axonos-stack
+cargo run --locked --bin session -- --seed 7 --frames 3000 | diff - reference/session-7.txt
+```
+
+Silence means it reproduced byte for byte on your machine. The session is not a
+happy path: an electrode lifts at 4.8 s and the transcript records the system
+withdrawing the right to actuate 96 ms later, while continuing to record —
+because the moments a device stops trusting itself are the ones a clinician
+needs afterwards. Its last line is an accounting identity, *delivered + lost =
+produced*, and if it ever fails one of the three components is lying about what
+it saw.
+
+Then check who wrote the automated commits on the live map, and whether GitHub
+signed them:
+
+```sh
+gh api repos/AxonOS-BCI/axonos-community-radar/commits \
+  --jq '.[0:10][] | "\(.commit.verification.verified)  \(.author.login)"'
+```
+
+That one is here because it recently read `false`. The scanner published through
+a personal token, and GitHub signs API-created commits only for app identities —
+so the public map's history was unsigned for six weeks. The fix was to stop the
+token writing at all: the scanner now hands the payload over as a release asset,
+which creates no commit, and this repository's own workflow commits it with the
+identity that *is* signed. The command stays in this README because a claim that
+was wrong once is worth leaving checkable.
 
 ### This account — founder, demos & community
 
