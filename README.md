@@ -5,7 +5,7 @@
   <img alt="Denis Yermakou — building the deterministic layer for brain–computer interfaces. Founder, AxonOS. Principal, DY Research." src="https://github.com/AxonOS-BCI/AxonOS-BCI/raw/main/assets/founder-light.svg" width="100%">
 </picture>
 
-**[axonos.org](https://axonos.org)** · **[AxonOS-org](https://github.com/AxonOS-org)** · **[dy-wcet](https://github.com/DYResearch/dy-wcet)** · **[Radar](https://axonos-bci.github.io/axonos-community-radar/)** · **[DY Research](https://dyresearch.github.io)** · **[Engineering notes](https://medium.com/@AxonOS)**
+**[axonos.org](https://axonos.org)** · **[AxonOS-org](https://github.com/AxonOS-org)** · **[dy-wcet](https://github.com/DYResearch/dy-wcet)** · **[Radar](https://axonos-bci.github.io/axonos-community-radar/)** · **[DY Research](https://dyresearch.github.io)** · **[DY PROOF](https://dy-proof.github.io)** · **[Engineering notes](https://medium.com/@AxonOS)**
 
 [![Kernel](https://img.shields.io/badge/kernel-Rust%20%C2%B7%20no__std-1f8fae?style=flat-square&labelColor=0d1117&logo=rust&logoColor=white)](https://github.com/AxonOS-org/axonos-kernel)
 [![Kani](https://img.shields.io/badge/Kani-30%20kernel%20harnesses%20in%20CI-2ea043?style=flat-square&labelColor=0d1117)](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md)
