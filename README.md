@@ -5,12 +5,12 @@
   <img alt="Denis Yermakou — building the deterministic layer for brain–computer interfaces. Founder, AxonOS. Principal, DY Research." src="https://github.com/AxonOS-BCI/AxonOS-BCI/raw/main/assets/founder-light.svg" width="100%">
 </picture>
 
-**[axonos.org](https://axonos.org)** · **[AxonOS-org](https://github.com/AxonOS-org)** · **[dy-wcet](https://github.com/DYResearch/dy-wcet)** · **[Radar](https://axonos-bci.github.io/axonos-community-radar/)** · **[DY Research](https://dyresearch.github.io)** · **[DY PROOF](https://dy-proof.github.io)** · **[Engineering notes](https://medium.com/@AxonOS)**
+**[axonos.org](https://axonos.org)** · **[AxonOS-org](https://github.com/AxonOS-org)** · **[DY-WCET](https://github.com/DYResearch/dy-wcet)** · **[Radar](https://axonos-bci.github.io/axonos-community-radar/)** · **[DY Research](https://dyresearch.github.io)** · **[DY PROOF](https://dy-proof.github.io)** · **[Engineering notes](https://medium.com/@AxonOS)**
 
 [![Kernel](https://img.shields.io/badge/kernel-Rust%20%C2%B7%20no__std-1f8fae?style=flat-square&labelColor=0d1117&logo=rust&logoColor=white)](https://github.com/AxonOS-org/axonos-kernel)
 [![Kani](https://img.shields.io/badge/Kani-30%20kernel%20harnesses%20in%20CI-2ea043?style=flat-square&labelColor=0d1117)](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md)
 [![Claims](https://img.shields.io/badge/every%20figure-CLAIMS.md-1f8fae?style=flat-square&labelColor=0d1117)](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md)
-[![dy-wcet](https://img.shields.io/badge/dy--wcet-8%20Kani%20proofs%20in%20CI-2ea043?style=flat-square&labelColor=0d1117)](https://github.com/DYResearch/dy-wcet)
+[![DY-WCET](https://img.shields.io/badge/dy--wcet-8%20Kani%20proofs%20in%20CI-2ea043?style=flat-square&labelColor=0d1117)](https://github.com/DYResearch/dy-wcet)
 [![Preprint](https://img.shields.io/badge/preprint-Zenodo-1f8fae?style=flat-square&labelColor=0d1117)](https://doi.org/10.5281/zenodo.20552007)
 [![Ecosystem pulse](https://img.shields.io/endpoint?url=https%3A%2F%2Faxonos-bci.github.io%2Faxonos-community-radar%2Fdata%2Fbadge-ecosystem.json&style=flat-square&labelColor=0d1117)](https://axonos-bci.github.io/axonos-community-radar/)
 
@@ -84,7 +84,7 @@ pub trait IntentStream {
 
 <sub>Evidence levels — **L1** formally proven · **L2** measured on reference hardware · **L3** independently reproduced · **analytical** derived by hand from a reference — are defined in [`VALIDATION.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md) and catalogued in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md). No measured figure is claimed until its raw trace lands in [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation). L3 is claimed for nothing. The peer-readable derivation is the [Zenodo preprint](https://doi.org/10.5281/zenodo.20552007): analytical, falsifiable, no measurement claims.</sub>
 
-### In focus · dy-wcet
+### In focus · DY-WCET
 
 **Timing analysis that refuses rather than rounds.** Worst-case response time in
 integer arithmetic, and a named refusal wherever a bound cannot be justified — the
