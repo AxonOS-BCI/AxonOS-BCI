@@ -13,6 +13,7 @@
 [![DY-WCET](https://img.shields.io/badge/dy--wcet-8%20Kani%20proofs%20in%20CI-2ea043?style=flat-square&labelColor=0d1117)](https://github.com/DYResearch/dy-wcet)
 [![Preprint](https://img.shields.io/badge/preprint-Zenodo-1f8fae?style=flat-square&labelColor=0d1117)](https://doi.org/10.5281/zenodo.20552007)
 [![Ecosystem pulse](https://img.shields.io/endpoint?url=https%3A%2F%2Faxonos-bci.github.io%2Faxonos-community-radar%2Fdata%2Fbadge-ecosystem.json&style=flat-square&labelColor=0d1117)](https://axonos-bci.github.io/axonos-community-radar/)
+[![AxonOS Radar](https://img.shields.io/badge/AxonOS%20Radar-open%20neurotech%20map-1f8fae?style=flat-square&labelColor=0b1220)](https://axonos-bci.github.io/axonos-community-radar/)
 
 </div>
 
