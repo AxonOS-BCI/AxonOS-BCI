@@ -55,9 +55,8 @@ impl Kernel {
     pub const TARGET_CURRENT: &'static str = "thumbv7em-none-eabihf";    // Cortex-M4F · STM32F407 · boots here
     pub const TARGET_NEXT:    &'static str = "thumbv8m.main-none-eabihf"; // Cortex-M33 + TrustZone-M · planned
     pub const SCHEDULE:       Schedule     = Schedule::EarliestDeadlineFirst;
-    pub const WCRT_BOUND_NS:  u32          = 1_000_000; // C-1   · L1 · proven upper bound, end to end
-    pub const WCRT_SEEN_NS:   u32          =   972_000; // C-1·L2 · worst observed, 12 h soak · trace pending
-    pub const JITTER_NS:      u32          =     2_100; // C-2   · L2 · σ · trace pending
+    pub const WCRT_TARGET_NS: u32          = 1_000_000; // DC1 requirement · not yet evidenced (C-1)
+    pub const PROVEN:         &'static str = "admission, EDF selection, SPSC FIFO, consent"; // L1 · Kani
     pub const HEAP_ON_PATH:   bool         = false;     // zero-copy DMA into a static slab arena
 }
 
@@ -75,15 +74,14 @@ pub trait IntentStream {
 | **Current target** | Cortex-M4F · STM32F407 · `thumbv7em-none-eabihf` — the reference firmware boots here |
 | **Next target** | Cortex-M33 + TrustZone-M · STM32H573 · `thumbv8m.main-none-eabihf` — planned |
 | **Scheduling** | Earliest-Deadline-First, against biological deadlines |
-| **Response time** | ≤ 1,000 µs end to end, proven — **C-1 · L1** · 972 µs the worst observed over a 12 h soak — **C-1·L2**, trace pending |
-| **Jitter** | 2.1 µs σ — **C-2 · L2**, trace pending |
-| **Consent** | Withdrawal proven to terminate in the correct state — **C-4·L1**, from `Granted` · ≤ 1,648 cycles — analytical |
+| **Response time** | Not claimed — ≤ 1,000 µs is the Standard's requirement; no proof of a time and no trace exist yet ([`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md) C-1) |
+| **Consent** | Changes only on a verified signature, never twice for one sequence, and withdrawal is final — **C-4·L1** · the 1,648-cycle figure is retracted |
 | **Front end** | ADS1299 · 8 channels · 24-bit |
 | **Memory safety** | `unsafe` confined to `axonos-spsc`; `#![forbid(unsafe_code)]` everywhere else in the kernel |
 | **Verification** | 30 Kani harnesses in the kernel, re-run in CI |
 | **Discipline** | `#![no_std]` · no heap on the critical path · zero-copy DMA |
 
-<sub>Evidence levels — **L1** formally proven · **L2** measured on reference hardware · **L3** independently reproduced · **analytical** derived by hand from a reference — are defined in [`VALIDATION.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md) and catalogued in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md). No measured figure is claimed until its raw trace lands in [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation). L3 is claimed for nothing. The peer-readable derivation is the [Zenodo preprint](https://doi.org/10.5281/zenodo.20552007): analytical, falsifiable, no measurement claims.</sub>
+<sub>Evidence levels — **L1** formally proven · **L2** measured on reference hardware · **L3** independently reproduced — are defined in [`VALIDATION.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/VALIDATION.md) and catalogued in [`CLAIMS.md`](https://github.com/AxonOS-org/axonos-standard/blob/main/CLAIMS.md). No measured figure is claimed until its raw trace lands in [`axonos-validation`](https://github.com/AxonOS-org/axonos-validation). L3 is claimed for nothing. The peer-readable derivation is the [Zenodo preprint](https://doi.org/10.5281/zenodo.20552007): analytical, falsifiable, no measurement claims.</sub>
 
 ### In focus · DY-WCET
 
@@ -194,8 +192,8 @@ the field and the playable demos.
 AxonOS is open, and it is funded by the work it makes possible.
 
 **Commission an engagement.** [DY Research](https://dyresearch.github.io) carries out
-independent technical due diligence — Snapshot, Focused Audit, Due Diligence — at a
-fixed price from $5,000, and its revenue funds AxonOS.
+independent technical due diligence — Snapshot, Focused Audit, Due Diligence — with
+terms on request, and its revenue funds AxonOS.
 **[Engagements and scope →](https://dyresearch.github.io/#engagements)**
 
 **Contribute voluntarily**, in Dogecoin, to `DMwHAhqVNWf7dyEznukxCufNS5rjuP5MTp` —
