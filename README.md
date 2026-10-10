@@ -192,8 +192,8 @@ the field and the playable demos.
 AxonOS is open, and it is funded by the work it makes possible.
 
 **Commission an engagement.** [DY Research](https://dyresearch.github.io) carries out
-independent technical due diligence — Snapshot, Focused Audit, Due Diligence — with
-terms on request, and its revenue funds AxonOS.
+independent technical due diligence — Snapshot, Focused Audit, Due Diligence — each
+scoped to the question in writing, and its revenue funds AxonOS.
 **[Engagements and scope →](https://dyresearch.github.io/#engagements)**
 
 **Contribute voluntarily**, in Dogecoin, to `DMwHAhqVNWf7dyEznukxCufNS5rjuP5MTp` —
